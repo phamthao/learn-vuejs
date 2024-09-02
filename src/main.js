@@ -11,7 +11,11 @@ import FormInputGroup from './components/molecules/FormInputGroup.vue'
 import Table from './components/organisms/Table.vue'
 import Pagination from './components/molecules/Pagination.vue'
 
+import router from "./router";
+
 const app = createApp(App)
+
+app.use(router)
 
 app.component('Button', Button)
     .component('Input', Input)

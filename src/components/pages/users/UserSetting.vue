@@ -1,5 +1,5 @@
 <template>
-    <Headline>Thêm/Sửa user</Headline>
+    <Headline>{{ pageTitle }}</Headline>
     <div class="container">
         <form>
             <div class="row">
@@ -16,14 +16,19 @@
                     <FormInputGroup label="Email" name="email" v-model="inputValue" />
                 </div>
             </div>
-            <Button class="btn-secondary float-right">Thoát</Button>
+            <router-link to="/users" class="btn btn-secondary float-right">Thoát</router-link>
             <Button class="btn-primary float-right mr-1">Lưu</Button>
         </form>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const pageTitle = computed(() => router.currentRoute.value.meta.title);
 
 const inputValue = ref('');
 

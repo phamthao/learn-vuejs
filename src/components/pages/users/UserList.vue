@@ -1,14 +1,30 @@
 <template>
     <MainLayout>
-        <Headline>Quản lý users</Headline>
-        <Button class="btn-primary mb-1 float-right">Thêm</Button>
+        <Headline>{{ pageTitle }}</Headline>
+        <router-link to="/users/add" class="btn btn-primary mb-1 float-right">Thêm</router-link>
         <Table :headers="tableHeaders" :rows="tableRows" :actions="tableActions" />
-        <Pagination :totalPages="5" :currentPage="2" />
+        <Pagination :totalPages="5" :currentPage="currentPage" @click="changePage" />
     </MainLayout>
 </template>
 
 <script setup>
+import { defineProps, computed } from 'vue';
+import { useRouter } from 'vue-router'
+
 import MainLayout from '../../templates/MainLayout.vue';
+
+const router = useRouter()
+
+const props = defineProps({
+    page: {
+        type: [Number, String],
+        default: 1
+    },
+})
+
+const pageTitle = computed(() => router.currentRoute.value.meta.title);
+
+const currentPage = computed(() => props.page)
 
 const tableHeaders = [
     { name: 'id', title: 'ID' },
@@ -29,7 +45,7 @@ const tableActions = [
         label: 'Sửa',
         class: 'btn-primary',
         handler: (row) => {
-            console.log('Edit:', row)
+            router.push(`/users/${row.id}/edit`)
         }
     },
     {
@@ -41,5 +57,9 @@ const tableActions = [
         }
     }
 ]
+
+const changePage = (page) => {
+    router.push({ path: '/users', query: { page: page } })
+}
 
 </script>

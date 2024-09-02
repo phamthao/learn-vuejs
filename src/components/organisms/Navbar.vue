@@ -6,9 +6,7 @@
                 <NavItem href="/users">Quản lý users</NavItem>
             </ul>
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">Đăng nhập</a>
-                </li>
+                <NavItem href="/login">Đăng nhập</NavItem>
             </ul>
         </div>
     </nav>

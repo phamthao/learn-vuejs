@@ -1,7 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router'
-import LoginRoutes from './LoginRoutes'
-import HomeRoutes from './HomeRoutes'
-import UserRoutes from './UserRoutes'
+import LoginRoutes from './routes/LoginRoutes'
+import HomeRoutes from './routes/HomeRoutes'
+import UserRoutes from './routes/UserRoutes'
 
 const routes = [...LoginRoutes, ...HomeRoutes, ...UserRoutes]
 

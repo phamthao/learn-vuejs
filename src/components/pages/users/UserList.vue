@@ -2,28 +2,31 @@
     <MainLayout>
         <Headline>{{ pageTitle }}</Headline>
         <router-link to="/users/add" class="btn btn-primary mb-1 float-right">Thêm</router-link>
-        <Table :headers="tableHeaders" :rows="tableRows" :actions="tableActions" />
-        <Pagination :totalPages="5" :currentPage="currentPage" @click="changePage" />
+        <p v-if="loading" class="clearfix">Loading...</p>
+        <Table v-if="!loading" :headers="tableHeaders" :rows="tableRows" :actions="tableActions" />
+        <Pagination :totalPages="totalPages" :currentPage="currentPage" @click="changePage" />
     </MainLayout>
 </template>
 
 <script setup>
-import { defineProps, computed } from 'vue';
+import { ref, computed, watchEffect, defineProps } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
-import MainLayout from '../../templates/MainLayout.vue';
+import MainLayout from '../../templates/MainLayout.vue'
 
 const router = useRouter()
+const store = useStore()
 
 const props = defineProps({
-    page: {
-        type: [Number, String],
-        default: 1
-    },
+    page: { type: [Number, String], default: 1 }
 })
 
-const pageTitle = computed(() => router.currentRoute.value.meta.title);
+const tableRows = ref([])
+const totalPages = ref(0)
+const loading = ref(true)
 
+const pageTitle = computed(() => router.currentRoute.value.meta.title)
 const currentPage = computed(() => props.page)
 
 const tableHeaders = [
@@ -31,12 +34,6 @@ const tableHeaders = [
     { name: 'username', title: 'User name' },
     { name: 'fullname', title: 'Full Name' },
     { name: 'email', title: 'Email' }
-]
-
-const tableRows = [
-    { id: 1, username: 'user1', fullname: 'User One', email: 'user1@example.com' },
-    { id: 2, username: 'user2', fullname: 'User Two', email: 'user2@example.com' },
-    { id: 3, username: 'user3', fullname: 'User Three', email: 'user3@example.com' }
 ]
 
 const tableActions = [
@@ -62,4 +59,17 @@ const changePage = (page) => {
     router.push({ path: '/users', query: { page: page } })
 }
 
+// Watch effect to fetch data when currentPage changes
+watchEffect(() => {
+    loading.value = true
+    store
+        .dispatch('user/getAll', { page: currentPage.value })
+        .then(() => {
+            tableRows.value = store.getters['user/list']
+            totalPages.value = store.getters['user/totalPages']
+        })
+        .finally(() => {
+            loading.value = false
+        })
+})
 </script>

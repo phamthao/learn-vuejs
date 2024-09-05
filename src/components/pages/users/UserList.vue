@@ -1,10 +1,11 @@
 <template>
     <MainLayout>
         <Headline>{{ pageTitle }}</Headline>
-        <router-link to="/users/add" class="btn btn-primary mb-1 float-right">Thêm</router-link>
-        <p v-if="loading" class="clearfix">Loading...</p>
-        <Table v-if="!loading" :headers="tableHeaders" :rows="tableRows" :actions="tableActions" />
-        <Pagination :totalPages="totalPages" :currentPage="currentPage" @click="changePage" />
+        <div class="d-flex justify-content-between mb-1">
+            <router-link to="/users/add" class="btn btn-primary">Thêm</router-link>
+            <Pagination :totalPages="totalPages" :currentPage="currentPage" @click="changePage" />
+        </div>
+        <Table :loading="loading" :headers="tableHeaders" :rows="tableRows" :actions="tableActions" />
     </MainLayout>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
     <nav v-show="totalPages > 1">
-        <ul class="pagination justify-content-end">
+        <ul class="pagination mb-0">
             <li v-for="page in pages" :key="page" :class="['page-item', { active: page == currentPage }]" @click="changePage(page)">
                 <a class="page-link" role="button" href="#">{{ page }}</a>
             </li>

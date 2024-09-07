@@ -1,6 +1,8 @@
 <template>
-    <Navbar />
-    <div class="container-fluid">
-        <slot></slot>
-    </div>
+    <slot></slot>
 </template>
+
+<script setup>
+import Navbar from '@/components/organisms/Navbar.vue'
+
+</script>

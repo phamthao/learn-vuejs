@@ -4,15 +4,15 @@
         <div class="card-body">
             <Alert :isShow="!!errorMessage" :message="errorMessage" @close="resetErrorMessage" />
             <form>
-                <FormInputGroup type="text" label="Username" name="username" v-model="inputValue.username" />
-                <FormInputGroup type="password" label="Password" name="password" v-model="inputValue.password" />
+                <FormInputGroup type="text" label="Username" name="username" v-model="inputValue.username" @keyup.enter="submitForm" />
+                <FormInputGroup type="password" label="Password" name="password" v-model="inputValue.password" @keyup.enter="submitForm" />
+                <div class="text-center">
+                    <Button class="btn-primary" @click="submitForm" :disabled="loadingSubmit">
+                        <span v-show="loadingSubmit" class="spinner-border spinner-border-sm"></span>
+                        <span>Đăng nhập</span>
+                    </Button>
+                </div>
             </form>
-            <div class="text-center">
-                <Button class="btn-primary" @click="submitForm" :disabled="loadingSubmit">
-                    <span v-show="loadingSubmit" class="spinner-border spinner-border-sm"></span>
-                    <span>Đăng nhập</span>
-                </Button>
-            </div>
         </div>
     </div>
 </template>

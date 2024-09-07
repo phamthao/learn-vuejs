@@ -8,18 +8,25 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ref, watch, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
     isShow: { type: Boolean, default: false },
     message: { type: String, default: '' }
 })
 
+const emit = defineEmits(['close'])
+
 const localIsShow = ref(props.isShow)
 
 const closeAlert = () => {
     localIsShow.value = false
+    emit('close')
 }
+
+watch(() => props.isShow, (newValue) => {
+    localIsShow.value = newValue
+})
 
 </script>
 

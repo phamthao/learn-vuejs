@@ -13,11 +13,11 @@
             <tr v-else-if="rows.length === 0">
                 <td :colspan="colspan" class="text-center">Không có dữ liệu</td>
             </tr>
-            <tr v-else="rows.length > 0" v-for="row in rows" :key="row.id">
+            <tr v-else="rows.length > 0" v-for="row in rows" :key="row.id" :ref="(el) => (itemRefs[row.id] = el)">
                 <td v-for="header in headers" :key="header.name">{{ row[header.name] }}</td>
                 <td v-if="hasActions">
                     <div class="btn-group float-right" role="group">
-                        <Button v-for="action in actions" :key="action.type" type="button" :class="action.class" @click="action.handler(row)">{{ action.label }}</Button>
+                        <Button v-for="action in actions" :key="action.type" type="button" :class="action.class" @click="action.handler({...row, itemRef: itemRefs[row.id]})">{{ action.label }}</Button>
                     </div>
                 </td>
             </tr>
@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { defineProps, computed } from 'vue'
+import { ref, defineProps, computed } from 'vue'
 
 const props = defineProps({
     loading: {
@@ -46,6 +46,8 @@ const props = defineProps({
         default: () => []
     }
 })
+
+const itemRefs = ref([]);
 
 const hasActions = computed(() => props.actions.length > 0)
 const colspan = computed(() => props.headers.length + (hasActions.value ? 1 : 0))

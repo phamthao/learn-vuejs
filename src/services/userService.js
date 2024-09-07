@@ -10,6 +10,18 @@ class UserService {
     get(id) {
         return axios.get(`${API_URL}/${id}`)
     }
+
+    create(data) {
+        return axios.post(`${API_URL}/add`, data)
+    }
+
+    update(data, id) {
+        return axios.put(`${API_URL}/${id}`, data)
+    }
+
+    delete(id) {
+        return axios.delete(`${API_URL}/${id}`)
+    }
 }
 
 export default new UserService()

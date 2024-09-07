@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watchEffect, defineProps } from 'vue'
+import { ref, computed, defineProps, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -50,9 +50,7 @@ const tableActions = [
         type: 'delete',
         label: 'Xóa',
         class: 'btn-danger',
-        handler: (row) => {
-            console.log('Delete:', row)
-        }
+        handler: (row) => handleDelete(row.id, row.itemRef)
     }
 ]
 
@@ -60,11 +58,27 @@ const changePage = (page) => {
     router.push({ path: '/users', query: { page: page } })
 }
 
-// Watch effect to fetch data when currentPage changes
-watchEffect(() => {
+const handleDelete = (id, el) => {
+    // el.style.display = 'none';
     loading.value = true
     store
-        .dispatch('user/getAll', { page: currentPage.value })
+        .dispatch('user/delete', { id: id })
+        .then(() => {
+            const metadata = store.getters['user/metadata']
+            const prevPage = Math.round((metadata.total - 1) / metadata.limit)
+            if (prevPage == currentPage.value || prevPage == totalPages.value) {
+                fetchData(currentPage.value);
+            } else {
+                totalPages.value = prevPage;
+                changePage(prevPage)
+            }
+        });
+}
+
+const fetchData = (page) => {
+    loading.value = true
+    store
+        .dispatch('user/getAll', { page: page })
         .then(() => {
             tableRows.value = store.getters['user/list']
             totalPages.value = store.getters['user/totalPages']
@@ -72,5 +86,10 @@ watchEffect(() => {
         .finally(() => {
             loading.value = false
         })
-})
+}
+
+watch(() => props.page, (nextValue) => {
+    fetchData(nextValue);
+}, {immediate: true})
+
 </script>

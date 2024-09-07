@@ -26,6 +26,10 @@ const props = defineProps({
 
 const localValue = ref(props.modelValue)
 
+watch(() => props.modelValue, (newValue) => {    
+    localValue.value = newValue
+})
+
 const emit = defineEmits(['update:modelValue'])
 
 watch(localValue, (newValue) => {

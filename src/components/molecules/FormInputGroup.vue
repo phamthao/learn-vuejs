@@ -1,7 +1,7 @@
 <template>
     <div class="form-group">
         <label :for="name">{{ label }}</label>
-        <Input :type="text" :name="name" v-model="localValue" />
+        <Input :type="text" :name="name" v-model="localValue" :disabled="disabled" />
     </div>
 </template>
 
@@ -24,12 +24,20 @@ const props = defineProps({
     modelValue: {
         type: [String, Number],
         default: ''
+    },
+    disabled: {
+        type: Boolean,
+        default: false
     }
 })
 
 const localValue = ref(props.modelValue)
 
 const emit = defineEmits(['update:modelValue'])
+
+watch(() => props.modelValue, (newValue) => {
+    localValue.value = newValue
+})
 
 watch(localValue, (newValue) => {
     emit('update:modelValue', newValue)

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://127.0.0.1/user'
+const API_URL = 'http://127.0.0.1/api/user'
 
 class UserService {
     getAll(params) {

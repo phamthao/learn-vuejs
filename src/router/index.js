@@ -11,9 +11,20 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const title = to.meta.title || 'Default Title'
-    document.title = title
-    next()
-})
+    // Check if user is logged in
+    const publicPages = ['/', '/login'];
+    const authRequired = !publicPages.includes(to.path);
+    const loggedIn = localStorage.getItem('user');
+    if (authRequired && !loggedIn) {
+        next('/login');
+    } else if (loggedIn && to.path === '/login') {
+        next('/');
+    } else {
+        // Set page title
+        const title = to.meta.title || 'Default Title'
+        document.title = title
+        next();
+    }
+});
 
 export default router
